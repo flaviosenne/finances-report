@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <title>Relatório</title>
+
+</head>
+
+<style>
+    .container {
+        width: 80%;
+        margin: 10px auto;
+        font: sans-serif;
+
+    }
+    .chart{
+        page-break-inside: avoid;
+    }
+    
+    .red {
+        color: red;
+    }
+    
+    header {
+        width: 100%;
+        display: block;
+        background: rgb(13, 186, 230);
+        margin: 20px auto;
+        border-radius: 8px;
+        padding: 10px;
+    }
+    
+    .header-left {
+        display: inline-block;
+        width: 50%;
+        text-align: left;
+    }
+    
+    .header-right {
+        display: inline-block;
+        padding: 5px;
+        width: 45%;
+        text-align: right;
+    }
+    
+    .title {
+        width: 100%;
+        margin: 0 auto;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 20pt;
+        background: rgb(124, 143, 226);
+        text-align: center;
+        font-weight: 800;
+    }
+    
+    .table {
+        font-size: 10pt;
+        margin: 0 auto;
+    }
+
+    .table td {
+        max-width: 100px;
+        text-align: center;
+        align-self: center;
+        align-content: center;
+        vertical-align: middle;
+    }
+</style>
+
+<body class="container">
+    <p class="title">Relatório de Lançamentos Financeiro</p>
+    <header>
+        <div class="header-left">
+            <p><b>Periodo de Lançamentos:</b> 3 meses</p>
+            <p><b>Total de Receita:</b>
+                <%=formatValue.format(totalRecep)%>
+            </p>
+            <p><b>Total de Despesa:</b>
+                <%=formatValue.format(totalExpense)%>
+            </p>
+            <p><b>Total:</b>
+                <%=formatValue.format(total)%>
+            </p>
+        </div>
+        <div class="header-right">
+            <p><b>Data:</b>
+                <%=formatDate.format(today)%>
+            </p>
+            <p><b>Usuário:</b>
+                <%=name%>
+            </p>
+            <p><b>Situação:</b>
+                <%=situation%>
+            </p>
+            <p><b>Porcentagem de gastos:</b>
+                <%=situationPercent%>
+            </p>
+        </div>
+    </header>
+
+    <div class="container-table">
+        <table class="table table-bordered">
+            <thead class='thead-dark'>
+                <td>TIPO</td>
+                <td>DATA</td>
+                <td>STATUS</td>
+                <td>DESCRIÇÃO</td>
+                <td>CATEGORY</td>
+                <td>VALOR</td>
+            </thead>
+            <% postings.forEach(posting=> { %>
+                <tr>
+                    <td>
+                        <%=posting.type.name%>
+                    </td>
+                    <td>
+                        <%=formatDate.format(posting.postingsDate)%>
+                    </td>
+                    <td>
+                        <%=posting.status.name%>
+                    </td>
+                    <td>
+                        <%=posting.description%>
+                    </td>
+                    <td>
+                        <%=posting.category.name%>
+                    </td>
+                    <% if(posting.type.id== 1) {%>
+                        <td class="red">
+                            <%=formatValue.format(posting.value)%>
+                        </td>
+                    <% } else { %>
+                        <td>
+                            <%=formatValue.format(posting.value)%>
+                        </td>
+                    <% } %>
+                </tr>
+                <% }) %>
+        </table>
+
+    </div>
+
+
+    <h1>Categorias dos gastos</h1>
+    <div id="bar-category" style="width: 480px; height: 400px;"></div>
+
+        <div class="chart">
+            <h1>Gastos no periodo de 3 meses</h1>
+            <div id="bar-expenses" style="width: 480px; height: 400px;"></div>
+        </div>
+        <div class="chart">
+            <h1>Ganhos no periodo de 3 meses</h1>
+            <div id="bar-revenues" style="width: 480px; height: 400px;"></div>
+        </div>
+        <div class="chart">
+            <h1>Gastos no periodo de 12 meses</h1>
+            <div id="log" style="width: 480px; height: 400px;"></div>
+        </div>
+
+    <script type="text/javascript">
+
+        const category = JSON.parse('<%-JSON.stringify(category)%>')
+        const frequency = JSON.parse('<%-JSON.stringify(frequency)%>')
+
+        const periodExpense = JSON.parse('<%-JSON.stringify(periodExpense)%>')
+        const frequencyExpense = JSON.parse('<%-JSON.stringify(frequencyExpense)%>')
+        const periodExpenseTwelveMonth = JSON.parse('<%-JSON.stringify(periodExpenseTwelveMonth)%>')
+        const frequencyExpenseTwelveMonth = JSON.parse('<%-JSON.stringify(frequencyExpenseTwelveMonth)%>')
+
+        const periodRevenue = JSON.parse('<%-JSON.stringify(periodRevenue)%>')
+        const frequencyRevenue = JSON.parse('<%-JSON.stringify(frequencyRevenue)%>')
+        const periodRevenueTwelveMonth = JSON.parse('<%-JSON.stringify(periodRevenueTwelveMonth)%>')
+        const frequencyRevenueTwelveMonth = JSON.parse('<%-JSON.stringify(frequencyRevenueTwelveMonth)%>')
+
+        var dataCategory = [{
+            type: 'bar',
+            y: frequency,
+            x: category
+        }];
+        Plotly.newPlot('bar-category', dataCategory);
+
+        var dataExpenses = [{
+            type: 'bar',
+            y: frequencyExpense,
+            x: periodExpense
+        }];
+        Plotly.newPlot('bar-expenses', dataExpenses);
+
+        var dataRevenue = [{
+            type: 'bar',
+            y: frequencyRevenue,
+            x: periodRevenue
+        }];
+        Plotly.newPlot('bar-revenues', dataRevenue);
+
+
+        var data = [{
+            type: 'scatter',
+            name: 'ganhos',
+            y: frequencyRevenueTwelveMonth,
+            x: periodRevenueTwelveMonth
+        }, {
+            type: 'scatter',
+            name: 'gastos',
+            y: frequencyExpenseTwelveMonth,
+            x: periodExpenseTwelveMonth
+        }];
+        Plotly.newPlot('log', data);
+    </script>
+
+</body>
+
+</html>

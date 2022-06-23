@@ -1,0 +1,22 @@
+{
+  "name": "finances-report",
+  "version": "1.0.0",
+  "description": "finances robot",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node ./src/app/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "node-schedule": "^2.1.0",
+    "nodemailer": "^6.7.5",
+    "ts-node": "^10.8.1"
+  },
+  "devDependencies": {
+    "@types/node-schedule": "^2.1.0",
+    "@types/nodemailer": "^6.4.4"
+  }
+}
