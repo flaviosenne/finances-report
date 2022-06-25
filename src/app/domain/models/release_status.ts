@@ -1,3 +1,4 @@
 export enum ReleaseStatus {
-    PENDING, PAID
+    PENDING = 'PENDING',
+    PAID = 'PAID'
 }

@@ -6,6 +6,7 @@ export class ReleaseRepositoryAdapter implements ReleaseRepository {
     async findAllByUserId(id: string): Promise<ReleaseModel[]> {
         return await prisma.release.findMany({
             where: {
+                active: true,
                 user: {
                     id
                 }

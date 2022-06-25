@@ -12,6 +12,7 @@ export interface ReleaseModel {
     status: ReleaseStatus
     type: ReleaseType
     value: number
+    active: boolean
     category: CategoryModel
     user: UserModel
 }

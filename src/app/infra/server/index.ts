@@ -9,7 +9,7 @@ export class Server {
    
         createServer((req: IncomingMessage, res: ServerResponse)=> { 
             res.end()
-        }).listen(() =>console.info(`Server finances reobot it is running in port ${PORT}`))
+        }).listen(() =>console.info(`Server finances robot it is running in port ${PORT}`))
 
     }
 }

@@ -131,9 +131,9 @@
                         <%=release.description%>
                     </td>
                     <td>
-                        <%=release.category.name%>
+                        <%=release.category.description%>
                     </td>
-                    <% if(release.type=='EXPRENSE' ) {%>
+                    <% if(release.type=='EXPENSE' ) {%>
                         <td class="red">
                             <%=formatValue.format(release.value)%>
                         </td>

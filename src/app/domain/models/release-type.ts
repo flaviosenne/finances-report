@@ -1,3 +1,4 @@
 export enum ReleaseType {
-    RECEP, EXPENSE
+    RECEP = 'RECEP', 
+    EXPENSE = 'EXPENSE'
 }

@@ -31,6 +31,7 @@ model Category {
   release     Release[]
   userId      String    @map("user_id")
 
+  @@map("category")
 }
 
 model Release {
@@ -39,8 +40,9 @@ model Release {
   updatedAt   DateTime @map("updated_at")
   description String   @map("description")
   dueDate     DateTime @map("due_date")
+  active      Boolean  @map("active")
   status      Status   @map("status_release")
-  type        Type     @map("type-release")
+  type        Type     @map("type_release")
   value       Float    @map("value")
   category    Category @relation(fields: [categoryId], references: [id])
   user        User     @relation(fields: [userId], references: [id])
