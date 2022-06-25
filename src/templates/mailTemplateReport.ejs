@@ -19,14 +19,15 @@
         font: sans-serif;
 
     }
-    .chart{
+
+    .chart {
         page-break-inside: avoid;
     }
-    
+
     .red {
         color: red;
     }
-    
+
     header {
         width: 100%;
         display: block;
@@ -35,20 +36,20 @@
         border-radius: 8px;
         padding: 10px;
     }
-    
+
     .header-left {
         display: inline-block;
         width: 50%;
         text-align: left;
     }
-    
+
     .header-right {
         display: inline-block;
         padding: 5px;
         width: 45%;
         text-align: right;
     }
-    
+
     .title {
         width: 100%;
         margin: 0 auto;
@@ -59,7 +60,7 @@
         text-align: center;
         font-weight: 800;
     }
-    
+
     .table {
         font-size: 10pt;
         margin: 0 auto;
@@ -94,7 +95,7 @@
                 <%=formatDate.format(today)%>
             </p>
             <p><b>Usuário:</b>
-                <%=name%>
+                <%=username%>
             </p>
             <p><b>Situação:</b>
                 <%=situation%>
@@ -115,32 +116,32 @@
                 <td>CATEGORY</td>
                 <td>VALOR</td>
             </thead>
-            <% postings.forEach(posting=> { %>
+            <% releases.forEach(release=> { %>
                 <tr>
                     <td>
-                        <%=posting.type.name%>
+                        <%=release.type%>
                     </td>
                     <td>
-                        <%=formatDate.format(posting.postingsDate)%>
+                        <%=formatDate.format(release.dueDate)%>
                     </td>
                     <td>
-                        <%=posting.status.name%>
+                        <%=release.status%>
                     </td>
                     <td>
-                        <%=posting.description%>
+                        <%=release.description%>
                     </td>
                     <td>
-                        <%=posting.category.name%>
+                        <%=release.category.name%>
                     </td>
-                    <% if(posting.type.id== 1) {%>
+                    <% if(release.type=='EXPRENSE' ) {%>
                         <td class="red">
-                            <%=formatValue.format(posting.value)%>
+                            <%=formatValue.format(release.value)%>
                         </td>
-                    <% } else { %>
-                        <td>
-                            <%=formatValue.format(posting.value)%>
-                        </td>
-                    <% } %>
+                        <% } else { %>
+                            <td>
+                                <%=formatValue.format(release.value)%>
+                            </td>
+                            <% } %>
                 </tr>
                 <% }) %>
         </table>
@@ -148,72 +149,25 @@
     </div>
 
 
-    <h1>Categorias dos gastos</h1>
-    <div id="bar-category" style="width: 480px; height: 400px;"></div>
+    <!-- <h1>Categorias dos gastos</h1> -->
+    <!-- <div id="bar-category" style="width: 480px; height: 400px;"></div>
 
-        <div class="chart">
-            <h1>Gastos no periodo de 3 meses</h1>
-            <div id="bar-expenses" style="width: 480px; height: 400px;"></div>
-        </div>
-        <div class="chart">
-            <h1>Ganhos no periodo de 3 meses</h1>
-            <div id="bar-revenues" style="width: 480px; height: 400px;"></div>
-        </div>
-        <div class="chart">
-            <h1>Gastos no periodo de 12 meses</h1>
-            <div id="log" style="width: 480px; height: 400px;"></div>
-        </div>
+    <div class="chart">
+        <h1>Gastos no periodo de 3 meses</h1>
+        <div id="bar-expenses" style="width: 480px; height: 400px;"></div>
+    </div>
+    <div class="chart">
+        <h1>Ganhos no periodo de 3 meses</h1>
+        <div id="bar-revenues" style="width: 480px; height: 400px;"></div>
+    </div>
+    <div class="chart">
+        <h1>Gastos no periodo de 12 meses</h1>
+        <div id="log" style="width: 480px; height: 400px;"></div>
+    </div> -->
 
     <script type="text/javascript">
 
-        const category = JSON.parse('<%-JSON.stringify(category)%>')
-        const frequency = JSON.parse('<%-JSON.stringify(frequency)%>')
-
-        const periodExpense = JSON.parse('<%-JSON.stringify(periodExpense)%>')
-        const frequencyExpense = JSON.parse('<%-JSON.stringify(frequencyExpense)%>')
-        const periodExpenseTwelveMonth = JSON.parse('<%-JSON.stringify(periodExpenseTwelveMonth)%>')
-        const frequencyExpenseTwelveMonth = JSON.parse('<%-JSON.stringify(frequencyExpenseTwelveMonth)%>')
-
-        const periodRevenue = JSON.parse('<%-JSON.stringify(periodRevenue)%>')
-        const frequencyRevenue = JSON.parse('<%-JSON.stringify(frequencyRevenue)%>')
-        const periodRevenueTwelveMonth = JSON.parse('<%-JSON.stringify(periodRevenueTwelveMonth)%>')
-        const frequencyRevenueTwelveMonth = JSON.parse('<%-JSON.stringify(frequencyRevenueTwelveMonth)%>')
-
-        var dataCategory = [{
-            type: 'bar',
-            y: frequency,
-            x: category
-        }];
-        Plotly.newPlot('bar-category', dataCategory);
-
-        var dataExpenses = [{
-            type: 'bar',
-            y: frequencyExpense,
-            x: periodExpense
-        }];
-        Plotly.newPlot('bar-expenses', dataExpenses);
-
-        var dataRevenue = [{
-            type: 'bar',
-            y: frequencyRevenue,
-            x: periodRevenue
-        }];
-        Plotly.newPlot('bar-revenues', dataRevenue);
-
-
-        var data = [{
-            type: 'scatter',
-            name: 'ganhos',
-            y: frequencyRevenueTwelveMonth,
-            x: periodRevenueTwelveMonth
-        }, {
-            type: 'scatter',
-            name: 'gastos',
-            y: frequencyExpenseTwelveMonth,
-            x: periodExpenseTwelveMonth
-        }];
-        Plotly.newPlot('log', data);
-    </script>
+       </script>
 
 </body>
 

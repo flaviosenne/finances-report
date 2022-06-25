@@ -1,3 +1,3 @@
 export interface EmailProtocol {
-    send(content: any, from: string, to: string): Promise<void>
+    send(content: any, to: string): Promise<void>
 }

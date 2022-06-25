@@ -1,20 +1,102 @@
-import { EmailProtocol } from "../../../protocols/email-protocol";
 import { ReportProtocol } from "../../../protocols/report-protocol";
+import { TemplatePdfProtocol } from "./protocols/template-pdf-protocol";
+import { EmailProtocol } from "../../../protocols/email-protocol";
+import { UserRepository } from '../repository/user-repository'
+import { ReleaseRepository } from '../repository/release-repository'
+import { UserModel } from "../../../models/user";
+import { ReleaseModel } from "../../../models/release";
+import { ReleaseStatus } from "../../../models/release_status";
+import { ReleaseType } from "../../../models/release-type";
+
 
 export class ReportPdf implements ReportProtocol{
-    constructor(private readonly email: EmailProtocol){}
+    constructor(
+        private readonly email: EmailProtocol, 
+        // private readonly userRepository: UserRepository,
+        //private readonly releaseRepository: ReleaseRepository,
+        private readonly templatePdf: TemplatePdfProtocol){}
     
-    async generate(): Promise<string> {
-        console.log('starting generate pdf...')
-        return new Promise<string>(resolve => {
-            setTimeout(()=> {
-                resolve('content')
-            }, 3000)
-        }).then(res => {
-            console.log('finish generate pdf')
-            this.email.send(res, '', '')
-            return res
+    async generate(): Promise<void> {
+
+        // const users: UserModel[] = await this.userRepository.findAllActive()
+        const users: UserModel[] = [
+            {
+                firstName: 'joao',
+                lastName: 'senne',
+                email: 'flaviosenne123@gmail.com',
+                createdAt: new Date(),
+                id: 'id user',
+                isActive: true,
+                updatedAt: new Date()
+            }
+        ]
+
+        users.forEach(async user => {
+            
+            // const releases: ReleaseModel[] = await this.releaseRepository.findAllByUserId(user.id)
+            const releases: ReleaseModel[] = [
+                {
+                    category: {
+                        id: 'id categoria',
+                        createdAt: new Date(),
+                        description: 'categoria 1', 
+                        updatedAt: new Date(), 
+                        user
+                    },
+                    createdAt: new Date(),
+                    description: 'conta de telone',
+                    dueDate: new Date(),
+                    id: 'id da conta',
+                    status: ReleaseStatus.PAID,
+                    type: ReleaseType.EXPENSE,
+                    value: 10,
+                    updatedAt: new Date(),
+                    user
+                },
+                {
+                    category: {
+                        id: 'id categoria 2',
+                        createdAt: new Date(),
+                        description: 'categoria 1', 
+                        updatedAt: new Date(), 
+                        user
+                    },
+                    createdAt: new Date(),
+                    description: 'conta de telone 2',
+                    dueDate: new Date(),
+                    id: 'id da conta',
+                    status: ReleaseStatus.PAID,
+                    type: ReleaseType.EXPENSE,
+                    value: 340.90,
+                    updatedAt: new Date(),
+                    user
+                },
+                {
+                    category: {
+                        id: 'id categoria 2',
+                        createdAt: new Date(),
+                        description: 'categoria 1', 
+                        updatedAt: new Date(), 
+                        user
+                    },
+                    createdAt: new Date(),
+                    description: 'salario',
+                    dueDate: new Date(),
+                    id: 'id da conta',
+                    status: ReleaseStatus.PAID,
+                    type: ReleaseType.RECEP,
+                    value: 1000,
+                    updatedAt: new Date(),
+                    user
+                }
+            ]
+
+            const template: string = await this.templatePdf.generateTemplatePdf(releases)
+
+            this.email.send(template, user.email)
+
         })
+
     }
 
 }

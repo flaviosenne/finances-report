@@ -1,3 +1,3 @@
 export interface ReportProtocol {
-    generate(): Promise<string>
+    generate(): Promise<void>
 }
