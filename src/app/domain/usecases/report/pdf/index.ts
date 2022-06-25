@@ -91,9 +91,9 @@ export class ReportPdf implements ReportProtocol{
                 }
             ]
 
-            const template: string = await this.templatePdf.generateTemplatePdf(releases)
+            const template = await this.templatePdf.generateTemplatePdf(releases)
 
-            this.email.send(template, user.email)
+            this.email.send(template, user.email, `${user.firstName} ${user.lastName}`)
 
         })
 

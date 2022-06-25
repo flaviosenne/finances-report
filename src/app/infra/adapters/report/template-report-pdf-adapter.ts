@@ -1,18 +1,16 @@
+import htmlPdf from 'html-pdf'
+import { renderFile } from 'ejs'
+import { join } from 'path'
 import { ReleaseModel } from "../../../domain/models/release";
 import { TemplatePdfProtocol } from "../../../domain/usecases/report/pdf/protocols/template-pdf-protocol";
-import ejs from 'ejs'
-import { join } from 'path'
-import htmlPdf from 'html-pdf'
-// import '../../../../templates'
 import { ReleaseType } from "../../../domain/models/release-type";
 
 const PATH_TEMPALTE = join(__dirname, '..', '..', '..', '..', 'templates', 'mailTemplateReport.ejs')
 
 export class TemplateReportPdfAdapter implements TemplatePdfProtocol{
-    async generateTemplatePdf(content: any): Promise<string> {
-        const tempate = await this.getTemplateReport(content)
-        console.log(tempate)
-        return tempate
+
+    async generateTemplatePdf(content: any): Promise<any> {
+        return await this.getTemplateReport(content)
     }
     
     private async getTemplateReport(releases: ReleaseModel[]) {
@@ -45,7 +43,7 @@ export class TemplateReportPdfAdapter implements TemplatePdfProtocol{
         const formatValue = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
         const formatDate = new Intl.DateTimeFormat('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' })
 
-        return await ejs.renderFile(PATH_TEMPALTE, {
+        const template = await renderFile(PATH_TEMPALTE, {
             'releases': releases,
             'username': username,
             'today': new Date(),
@@ -68,5 +66,7 @@ export class TemplateReportPdfAdapter implements TemplatePdfProtocol{
             // 'frequencyRevenueTwelveMonth': revenuesPeriodTwelveMonth['frequency'],
 
         })
+
+        return await htmlPdf.create(template, { format: 'A3' })
     }
 }
