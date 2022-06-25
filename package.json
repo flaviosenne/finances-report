@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^3.15.2",
     "dotenv": "^16.0.1",
     "ejs": "^3.1.8",
     "html-pdf": "^3.0.1",
@@ -20,6 +21,7 @@
   "devDependencies": {
     "@types/ejs": "^3.1.1",
     "@types/html-pdf": "^3.0.0",
+    "@types/node": "^18.0.0",
     "@types/node-schedule": "^2.1.0",
     "@types/nodemailer": "^6.4.4"
   }
