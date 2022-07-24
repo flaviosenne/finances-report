@@ -1,8 +1,8 @@
-export interface TemplateInterface {
+export interface TemplateAttachmentsInterface {
     filename: string
     content: any
 }
 
 export interface TemplateProtocol {
-    generateTemplate(content: any): Promise<TemplateInterface>
+    generateTemplate(content: any): Promise<TemplateAttachmentsInterface>
 }

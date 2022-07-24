@@ -1,5 +1,5 @@
-import { TemplateInterface } from "../../app/usecases/report/template.protocol";
+import { TemplateAttachmentsInterface } from "../../app/usecases/report/template.protocol";
 
 export interface EmailProtocol {
-    send(templates: TemplateInterface[], to: string, username: string): Promise<void>
+    send(templates: TemplateAttachmentsInterface[], to: string, username: string): Promise<void>
 }

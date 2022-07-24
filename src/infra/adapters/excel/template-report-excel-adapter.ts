@@ -8,7 +8,7 @@ import {
     TemplateProtocol,
 }from './imports'
 
-const XLSX_FILE_PATH = join(__dirname, '..', '..', '..', 'templates', 'relatorio-mensal.xlsx')
+const XLSX_FILE_PATH = join(__dirname, '..', '..', '..','..', 'public', 'relatorio-mensal.xlsx')
 
 export class TemplateReportExcelImpl implements TemplateProtocol {
     
@@ -25,7 +25,7 @@ export class TemplateReportExcelImpl implements TemplateProtocol {
                 'Data': new Intl.DateTimeFormat('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(release.dueDate),
                 'Status': release.status,
                 'Descrição': release.description,
-                'Categoria': release.category,
+                'Categoria': release.category.description,
                 'Valor': new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(release.value)
             }
         })
