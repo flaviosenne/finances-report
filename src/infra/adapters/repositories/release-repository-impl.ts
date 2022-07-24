@@ -1,8 +1,9 @@
-import { ReleaseModel } from '../../domain/models/release'
-import { ReleaseRepository } from '../../domain/usecases/report/repository/release-repository'
 import { prisma } from './prisma'
+import { UserModel } from '../../../domain/models/user'
+import { ReleaseModel } from '../../../domain/models/release'
+import { ReleaseRepository } from '../../../app/usecases/report/release.repository'
 
-export class ReleaseRepositoryAdapter implements ReleaseRepository {
+export class ReleaseRepositoryPrismaImpl implements ReleaseRepository {
     async findAllByUserId(id: string): Promise<ReleaseModel[]> {
         return await prisma.release.findMany({
             where: {
@@ -64,6 +65,21 @@ export class ReleaseRepositoryAdapter implements ReleaseRepository {
             //     }
             // }
         }) as ReleaseModel[]
+    }
+
+    async findAllActive(): Promise<UserModel[]> {
+        return await prisma.user.findMany({
+            where: { isActive: true },
+            select: {
+                id: true,
+                createdAt: true,
+                updatedAt: true,
+                email: true,
+                isActive: true,
+                firstName: true,
+                lastName: true,
+            }
+        })
     }
 
 }

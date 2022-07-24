@@ -1,19 +1,22 @@
-import htmlPdf from 'html-pdf'
-import { renderFile } from 'ejs'
-import { join } from 'path'
-import { ReleaseModel } from "../../../domain/models/release";
-import { TemplatePdfProtocol } from "../../../domain/usecases/report/pdf/protocols/template-pdf-protocol";
-import { ReleaseType } from "../../../domain/models/release-type";
+import * as ejs from 'ejs'
+import {
+    join,
+    create,
+    ReleaseType,
+    ReleaseModel,
+    TemplateProtocol,
+    TemplateInterface,
+}from './imports';
 
-const PATH_TEMPALTE = join(__dirname, '..', '..', '..', '..', 'templates', 'mailTemplateReport.ejs')
+const PATH_TEMPALTE = join(__dirname, '..', '..', '..', 'templates', 'mailTemplateReport.ejs')
 
-export class TemplateReportPdfAdapter implements TemplatePdfProtocol{
+export class TemplateReportPdfImpl implements TemplateProtocol{
 
-    async generateTemplatePdf(content: any): Promise<any> {
-        return await this.getTemplateReport(content)
+    async generateTemplate(content: any): Promise<TemplateInterface> {
+        return await this.getTemplateReportPdf(content)
     }
     
-    private async getTemplateReport(releases: ReleaseModel[]) {
+    private async getTemplateReportPdf(releases: ReleaseModel[]) {
  
 
         // const category = await postingsService.frequencyCategory(postings)
@@ -43,7 +46,7 @@ export class TemplateReportPdfAdapter implements TemplatePdfProtocol{
         const formatValue = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
         const formatDate = new Intl.DateTimeFormat('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' })
 
-        const template = await renderFile(PATH_TEMPALTE, {
+        const template = await ejs.renderFile(PATH_TEMPALTE, {
             'releases': releases,
             'username': username,
             'today': new Date(),
@@ -67,6 +70,8 @@ export class TemplateReportPdfAdapter implements TemplatePdfProtocol{
 
         })
 
-        return await htmlPdf.create(template, { format: 'A3' })
+        const content = create(template, { format: 'A3' })
+
+        return { content, filename: 'relatório-mensal.pdf'}
     }
 }
