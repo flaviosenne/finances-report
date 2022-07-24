@@ -5,7 +5,7 @@ import {
     EmailProtocol,
     TemplateProtocol,
     TemplateAttachmentsInterface,
-    ReleaseRepository
+    ReportRepository
 }
     from "./imports";
 
@@ -13,7 +13,7 @@ export class ReportImpl implements ReportProtocol {
 
     constructor(
         private readonly email: EmailProtocol,
-        private readonly repository: ReleaseRepository,
+        private readonly repository: ReportRepository,
         private readonly templates: TemplateProtocol[]) { }
 
     async generate(): Promise<void> {

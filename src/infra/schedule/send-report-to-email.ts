@@ -1,7 +1,7 @@
 import {scheduleJob} from 'node-schedule'
 import { ReportPdfAndExcelFactory } from '../factories/report.factory'
 
-const SCHEDULE_TIME =  process.env.SCHEDULE_TIME || ''
+const SCHEDULE_TIME =  process.env.SCHEDULE_REPORT_TIME || ''
 
 scheduleJob(SCHEDULE_TIME, async () => {
 

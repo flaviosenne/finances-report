@@ -1,9 +1,9 @@
 import { prisma } from './prisma'
 import { UserModel } from '../../../domain/models/user'
 import { ReleaseModel } from '../../../domain/models/release'
-import { ReleaseRepository } from '../../../app/usecases/report/release.repository'
+import { ReportRepository } from '../../../app/usecases/report/repository'
 
-export class ReleaseRepositoryPrismaImpl implements ReleaseRepository {
+export class ReportRepositoryPrismaImpl implements ReportRepository {
     async findAllByUserId(id: string): Promise<ReleaseModel[]> {
         return await prisma.release.findMany({
             where: {
@@ -20,14 +20,14 @@ export class ReleaseRepositoryPrismaImpl implements ReleaseRepository {
                 dueDate: true,
                 status: true,
                 type: true,
+                active: true,
                 value: true,
                 category: {
                     select: {
                         id: true,
                         createdAt: true,
                         updatedAt: true,
-                        description: true,
-                        user: true,
+                        description: true
                     }
                 },
                 user: {
@@ -41,29 +41,7 @@ export class ReleaseRepositoryPrismaImpl implements ReleaseRepository {
                         lastName: true,
                     }
                 }
-            },
-            // include: {
-            //     category: {
-            //         select: {
-            //             id: true,
-            //             createdAt: true,
-            //             updatedAt: true,
-            //             description: true,
-            //             user: true,
-            //         }
-            //     },
-            //     user: {
-            //         select: {
-            //             id: true,
-            //             createdAt: true,
-            //             updatedAt: true,
-            //             email: true,
-            //             isActive: true,
-            //             firstName: true,
-            //             lastName: true,
-            //         }
-            //     }
-            // }
+            }
         }) as ReleaseModel[]
     }
 

@@ -1,3 +1,3 @@
 export interface BackupProtocol {
-    run(): Promise<void>
+    generate(): Promise<void>
 }

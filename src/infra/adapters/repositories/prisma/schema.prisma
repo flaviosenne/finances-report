@@ -8,18 +8,32 @@ datasource db {
 }
 
 model User {
-  id        String     @id
-  createdAt DateTime   @map("created_at")
-  updatedAt DateTime   @map("updated_at")
-  email     String     @map("email")
-  isActive  Boolean    @map("is_active")
-  firstName String     @map("first_name")
-  lastName  String     @map("last_name")
-  category  Category[]
-  releases  Release[]
-
+  id         String     @id
+  createdAt  DateTime   @map("created_at")
+  updatedAt  DateTime   @map("updated_at")
+  email      String     @map("email")
+  isActive   Boolean    @map("is_active")
+  firstName  String     @map("first_name")
+  lastName   String     @map("last_name")
+  password   String     @map("password")
+  categories Category[]
+  banks      Bank[]
+  releases   Release[]
+  codes      Codes[]
 
   @@map("custom_user")
+}
+
+model Codes {
+  id        String   @id
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+  code      String   @map("code")
+  isValid   Boolean  @map("is_valid")
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @map("user_id")
+
+  @@map("user_code")
 }
 
 model Category {
@@ -27,11 +41,26 @@ model Category {
   createdAt   DateTime  @map("created_at")
   updatedAt   DateTime  @map("updated_at")
   description String    @map("description")
+  isActive    Boolean   @map("is_active")
+  image       String?    @map("image")
   user        User      @relation(fields: [userId], references: [id])
   release     Release[]
   userId      String    @map("user_id")
 
   @@map("category")
+}
+
+model Bank {
+  id          String    @id
+  createdAt   DateTime  @map("created_at")
+  updatedAt   DateTime  @map("updated_at")
+  description String    @map("description")
+  isActive    Boolean   @map("is_active")
+  image       String?    @map("image")
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String    @map("user_id")
+
+  @@map("bank")
 }
 
 model Release {
@@ -48,7 +77,7 @@ model Release {
   user        User     @relation(fields: [userId], references: [id])
   userId      String   @map("user_id")
   categoryId  String   @map("category_id")
-
+  bankId      String?   @map("bank_id")
 
   @@map("custom_release")
 }
