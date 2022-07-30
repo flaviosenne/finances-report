@@ -8,13 +8,15 @@ import { generateScriptBank } from "./generators/bank";
 import { generateScriptCategory } from "./generators/category";
 import { generateScriptReleases } from "./generators/releases";
 import { generateScriptUserCode } from "./generators/user-code";
+import { FileProtocol } from '../../../domain/protocols/file.protocol';
 
 const SQL_FILE_PATH = join(__dirname, '..', '..', '..', '..', 'public')
 
 
 export class BackupImpl implements BackupProtocol {
 
-    constructor(private readonly repository: BackupRepository) { }
+    constructor(private readonly repository: BackupRepository, 
+        private readonly file: FileProtocol) { }
 
     async generate(): Promise<void> {
         const users: BackupVo[] = await this.repository.findAllUsersActive()
@@ -34,9 +36,7 @@ export class BackupImpl implements BackupProtocol {
 
             const sql = `${sqlUser}\n${sqlUserCode}\n${sqlCategory}\n${sqlBank}\n${sqlReleases}`
 
-            const date = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`
-
-            writeFileSync(`${SQL_FILE_PATH}/backup-${user.firstName}-${date}.txt`, sql, 'binary')
+            this.file.writeFile(`${SQL_FILE_PATH}/backup-${user.id}.txt`, sql)
 
         })
     }

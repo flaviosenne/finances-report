@@ -1,6 +1,7 @@
 import {createServer, IncomingMessage, ServerResponse } from 'http'
 import '../schedule/send-report-to-email'
 import '../schedule/generate-backup'
+import '../schedule/recovery-backup'
 
 const PORT = process.env.PORT || 3000
 

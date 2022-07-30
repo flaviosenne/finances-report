@@ -1,13 +1,9 @@
-import {
-    ReleaseModel,
-    UserModel,
-    ReportProtocol,
-    EmailProtocol,
-    TemplateProtocol,
-    TemplateAttachmentsInterface,
-    ReportRepository
-}
-    from "./imports";
+import { UserModel } from "../../../domain/models/user";
+import { ReleaseModel } from "../../../domain/models/release";
+import { EmailProtocol } from "../../../domain/protocols/email.protocol";
+import { ReportProtocol } from "../../../domain/protocols/report.protocol";
+import { ReportRepository } from "./repository";
+import { TemplateAttachmentsInterface, TemplateProtocol } from "./template.protocol";
 
 export class ReportImpl implements ReportProtocol {
 

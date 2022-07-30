@@ -1,12 +1,10 @@
 import * as ejs from 'ejs'
-import {
-    join,
-    create,
-    ReleaseType,
-    ReleaseModel,
-    TemplateProtocol,
-    TemplateAttachmentsInterface,
-} from './imports';
+import { join } from 'path'
+import { create } from 'html-pdf'
+import { ReleaseType } from '../../../domain/models/release-type'
+import { ReleaseModel } from '../../../domain/models/release'
+import { TemplateAttachmentsInterface, TemplateProtocol } from '../../../app/usecases/report/template.protocol'
+
 
 const PATH_TEMPALTE = join(__dirname, '..', '..', '..', '..','public', 'mailTemplateReport.ejs')
 

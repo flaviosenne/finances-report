@@ -1,6 +1,6 @@
 import { transporter } from "../../config/smtp";
 import { EmailProtocol } from "../../../domain/protocols/email.protocol";
-import { TemplateAttachmentsInterface } from "../report/imports";
+import { TemplateAttachmentsInterface } from "../../../app/usecases/report/template.protocol";
 
 const MAIL_FROM = 'facildespesa@gmail.com'
 

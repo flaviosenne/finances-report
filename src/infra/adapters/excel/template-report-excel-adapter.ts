@@ -1,17 +1,16 @@
 import * as json2xls from 'json2xls'
-import { 
-    join,
-    unlinkSync, 
-    ReleaseModel,
-    readFileSync,
-    writeFileSync, 
-    TemplateProtocol,
-}from './imports'
+import { join } from 'path'
+import { ReleaseModel } from '../../../domain/models/release'
+import { FileProtocol } from '../../../domain/protocols/file.protocol'
+import { TemplateProtocol } from '../../../app/usecases/report/template.protocol'
+
 
 const XLSX_FILE_PATH = join(__dirname, '..', '..', '..','..', 'public', 'relatorio-mensal.xlsx')
 
 export class TemplateReportExcelImpl implements TemplateProtocol {
     
+    constructor(private readonly file: FileProtocol){}
+
     async generateTemplate(content: any): Promise<any> {
         return await this.getTemplateReportExcel(content)
     }
@@ -32,11 +31,11 @@ export class TemplateReportExcelImpl implements TemplateProtocol {
 
         const excel = json2xls(releasesFormatted)
 
-        writeFileSync(XLSX_FILE_PATH, excel, 'binary')
+        await this.file.writeFile(XLSX_FILE_PATH, excel)
 
-        const content = readFileSync(XLSX_FILE_PATH)
+        const content = await this.file.readFile(XLSX_FILE_PATH)
 
-        unlinkSync(XLSX_FILE_PATH)
+        await this.file.deleteFile(XLSX_FILE_PATH)
 
         return { content, filename: 'relatório-mensal.xlsx'}
     }
