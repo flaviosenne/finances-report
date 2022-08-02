@@ -10,7 +10,7 @@ import { generateScriptReleases } from "./generators/releases";
 import { generateScriptUserCode } from "./generators/user-code";
 import { FileProtocol } from '../../../domain/protocols/file.protocol';
 
-const SQL_FILE_PATH = join(__dirname, '..', '..', '..', '..', 'public')
+const SQL_FILE_PATH = join(__dirname, '..', '..', '..', '..', 'backup')
 
 
 export class BackupImpl implements BackupProtocol {
@@ -36,7 +36,7 @@ export class BackupImpl implements BackupProtocol {
 
             const sql = `${sqlUser}\n${sqlUserCode}\n${sqlCategory}\n${sqlBank}\n${sqlReleases}`
 
-            this.file.writeFile(`${SQL_FILE_PATH}/backup-${user.id}.txt`, sql)
+            this.file.writeFile(`${SQL_FILE_PATH}/backup-${user.id}.sql`, sql)
 
         })
     }

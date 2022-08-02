@@ -3,7 +3,7 @@ import { FileProtocol } from "../../../domain/protocols/file.protocol";
 import { RecoveryProtocol } from "../../../domain/protocols/recovery.protocol";
 import { RecoveryRepository } from "./repository";
 
-const SQL_FILE_PATH = join(__dirname, '..', '..', '..', '..', 'public')
+const SQL_FILE_PATH = join(__dirname, '..', '..', '..', '..', 'backup')
 
 
 export class RecoveryImpl implements RecoveryProtocol {
@@ -16,7 +16,7 @@ export class RecoveryImpl implements RecoveryProtocol {
         const exists = await this.repository.existsUserById(userId)
         
         const sqls: string[] = (await this.file.readDirs(SQL_FILE_PATH)).map(files => {
-            return files.replace('backup-','').replace(/\d/, '')
+            return files.replace('backup-','').replace('.sql', '')
         })
         
         const fileSqlOfUser = sqls.find(element => element == userId)
