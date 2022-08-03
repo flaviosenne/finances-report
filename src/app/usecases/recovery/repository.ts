@@ -1,6 +1,7 @@
+import { BackupVo } from "../backup/backup.vo"
 
 export interface RecoveryRepository {
-    recoveryAllByUser(sql: string): Promise<void>
+    recoveryAllByUser(backup: BackupVo): Promise<void>
 
     existsUserById(userId: string): Promise<boolean>
     

@@ -10,9 +10,9 @@ export class FileService implements FileProtocol {
     async readFile(path: string): Promise<Buffer> {
         return readFileSync(path) 
     }
-
+    
     async writeFile(path: string, content: any): Promise<void> {
-        writeFileSync(path, content, 'binary')
+        writeFileSync(path, content, 'utf8')
     }
 
     async deleteFile(path: string): Promise<void> {

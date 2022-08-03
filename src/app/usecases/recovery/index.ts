@@ -5,28 +5,27 @@ import { RecoveryRepository } from "./repository";
 
 const SQL_FILE_PATH = join(__dirname, '..', '..', '..', '..', 'backup')
 
-
 export class RecoveryImpl implements RecoveryProtocol {
 
     constructor(private readonly repository: RecoveryRepository, 
         private readonly file: FileProtocol){}
 
     async proccess(userId: string): Promise<void> {
-
-        const exists = await this.repository.existsUserById(userId)
-        
-        const sqls: string[] = (await this.file.readDirs(SQL_FILE_PATH)).map(files => {
-            return files.replace('backup-','').replace('.sql', '')
+ 
+        const jsons: string[] = (await this.file.readDirs(SQL_FILE_PATH)).map(files => {
+            return files.replace('.json', '')
         })
+                
+        const fileJsonOfUser = jsons.find(element => element == userId)
         
-        const fileSqlOfUser = sqls.find(element => element == userId)
         
-        if(fileSqlOfUser){
+        if(fileJsonOfUser){
+            const exists = await this.repository.existsUserById(userId)
             exists && await this.repository.deleteAllByUserIdInCascate(userId)
             
-            const sql = await this.file.readFile(fileSqlOfUser)
+            const json = await this.file.readFile(`${SQL_FILE_PATH}/${fileJsonOfUser}.json`)
 
-            await this.repository.recoveryAllByUser(sql.toString())
+            await this.repository.recoveryAllByUser(JSON.parse(json.toString()))
         }
         
     }

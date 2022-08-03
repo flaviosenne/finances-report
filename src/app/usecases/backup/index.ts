@@ -36,7 +36,9 @@ export class BackupImpl implements BackupProtocol {
 
             const sql = `${sqlUser}\n${sqlUserCode}\n${sqlCategory}\n${sqlBank}\n${sqlReleases}`
 
-            this.file.writeFile(`${SQL_FILE_PATH}/backup-${user.id}.sql`, sql)
+            this.file.writeFile(`${SQL_FILE_PATH}/${user.id}.sql`, sql)
+            
+            this.file.writeFile(`${SQL_FILE_PATH}/${user.id}.json`, JSON.stringify(backup))
 
         })
     }
