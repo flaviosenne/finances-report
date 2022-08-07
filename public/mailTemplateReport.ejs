@@ -113,36 +113,56 @@
                 <td>DATA</td>
                 <td>STATUS</td>
                 <td>DESCRIÇÃO</td>
-                <td>CATEGORY</td>
+                <td>CATEGORIA</td>
                 <td>VALOR</td>
             </thead>
             <% releases.forEach(release=> { %>
                 <tr>
-                    <td>
-                        <%=release.type%>
-                    </td>
+                    
+                    <% if(release.type=='RECEP' ) {%>
+                        <td>
+                            RECEITA
+                        </td>
+                    <% } else { %>
+                            <td>
+                                DESPESA
+                            </td>
+                    <% } %>
+                    
                     <td>
                         <%=formatDate.format(release.dueDate)%>
                     </td>
-                    <td>
-                        <%=release.status%>
-                    </td>
+                    
+                    <% if(release.status=='PENDING' ) {%>
+                        <td>
+                            PENDENTE
+                        </td>
+                    <% } else { %>
+                        <td>
+                            FINALIZDO
+                        </td>
+                    <% } %>
+                    
                     <td>
                         <%=release.description%>
                     </td>
+
                     <td>
                         <%=release.category.description%>
                     </td>
+                    
                     <% if(release.type=='EXPENSE' ) {%>
                         <td class="red">
                             <%=formatValue.format(release.value)%>
                         </td>
-                        <% } else { %>
-                            <td>
-                                <%=formatValue.format(release.value)%>
-                            </td>
-                            <% } %>
+                    <% } else { %>
+                        <td>
+                            <%=formatValue.format(release.value)%>
+                        </td>
+                    <% } %>
+                
                 </tr>
+                
                 <% }) %>
         </table>
 
@@ -167,7 +187,7 @@
 
     <script type="text/javascript">
 
-       </script>
+    </script>
 
 </body>
 

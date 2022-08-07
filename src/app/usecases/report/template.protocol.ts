@@ -1,8 +1,5 @@
-export interface TemplateAttachmentsInterface {
-    filename: string
-    content: any
-}
+import { TemplateAttachmentsProtocol } from "../../../domain/protocols/email.protocol";
 
 export interface TemplateProtocol {
-    generateTemplate(content: any): Promise<TemplateAttachmentsInterface>
+    generateTemplate(content: any): Promise<TemplateAttachmentsProtocol>
 }

@@ -5,7 +5,7 @@ export const generateScriptReleases = (releases: ReleaseBackupVo[], userId: stri
     const sql = `
         insert into custom_release (id, created_at, updated_at, 
             description, active, due_date, status_release, type_release,
-            value, category_id, user_id, bank_id)
+            value, category_id, bank_id, user_id)
         values ${releases.map(release => {
         return `
             (

@@ -3,21 +3,22 @@ import { join } from 'path'
 import { create } from 'html-pdf'
 import { ReleaseType } from '../../../domain/models/release-type'
 import { ReleaseModel } from '../../../domain/models/release'
-import { TemplateAttachmentsInterface, TemplateProtocol } from '../../../app/usecases/report/template.protocol'
+import { TemplateProtocol } from '../../../app/usecases/report/template.protocol'
+import { TemplateAttachmentsProtocol } from '../../../domain/protocols/email.protocol'
 
 
 const PATH_TEMPALTE = join(__dirname, '..', '..', '..', '..','public', 'mailTemplateReport.ejs')
 
 export class TemplateReportPdfImpl implements TemplateProtocol {
 
-    async generateTemplate(content: any): Promise<TemplateAttachmentsInterface> {
+    async generateTemplate(content: any): Promise<TemplateAttachmentsProtocol> {
         return await this.getTemplateReportPdf(content)
     }
 
     private async getTemplateReportPdf(releases: ReleaseModel[]) {
 
 
-        return new Promise<TemplateAttachmentsInterface>(async resolve => {
+        return new Promise<TemplateAttachmentsProtocol>(async resolve => {
 
             // const category = await postingsService.frequencyCategory(postings)
             // const expensesPeriod = await postingsService.frequencyExpenses(postings)
