@@ -13,7 +13,7 @@ export interface EmailDto {
 
 
 export interface AccountProtocol {
-    activeAccount(): Promise<void>
+    activeAccount(payload: EmailDto): Promise<void>
     
-    redefinePassword(): Promise<void>
+    redefinePassword(payload: EmailDto): Promise<void>
 }

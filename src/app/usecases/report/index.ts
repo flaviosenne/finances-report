@@ -1,16 +1,16 @@
 import { UserModel } from "../../../domain/models/user";
 import { ReleaseModel } from "../../../domain/models/release";
-import { EmailProtocol, TemplateAttachmentsProtocol } from "../../../domain/protocols/email.protocol";
+import { EmailFileProtocol, TemplateAttachmentsProtocol } from "../../../domain/protocols/email.protocol";
 import { ReportProtocol } from "../../../domain/protocols/report.protocol";
 import { ReportRepository } from "./repository";
-import { TemplateProtocol } from "./template.protocol";
+import { TemplateFileProtocol } from "./template.protocol";
 
 export class ReportImpl implements ReportProtocol {
 
     constructor(
-        private readonly email: EmailProtocol,
+        private readonly email: EmailFileProtocol,
         private readonly repository: ReportRepository,
-        private readonly templates: TemplateProtocol[]) { }
+        private readonly templates: TemplateFileProtocol[]) { }
 
     async generate(): Promise<void> {
 
@@ -23,7 +23,7 @@ export class ReportImpl implements ReportProtocol {
                 return await template.generateTemplate(releases);
             }))
 
-            this.email.send(attachments, user.email, `${user.firstName} ${user.lastName}`)
+            this.email.sendFile(attachments, user.email, `${user.firstName} ${user.lastName}`)
 
         })
 

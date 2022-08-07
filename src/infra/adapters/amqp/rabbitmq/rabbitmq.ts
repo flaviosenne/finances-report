@@ -1,66 +1,84 @@
+import {connect, Connection, Channel, Options, ConsumeMessage} from 'amqplib'
 import { AmqpProtocol } from "../../../../domain/protocols/amqp.protocol";
-import * as client from 'amqplib'
 import { rabbitmqCredentials } from "../../../config/rabbitmq";
+import { AccountFactory } from "../../../factories/account.factory";
 
 
 export class RabbitmqImpl implements AmqpProtocol {
 
-    private exchange: string = 'topic'
     private uri: string = rabbitmqCredentials.uri
-    private connection: client.Connection = null
-    private channel: client.Channel = null
+    private connection: Connection = null
+    private channel: Channel = null
 
     constructor() {
         this.initialize()
     }
 
-    async publishMessage(content: any, routinKey: string): Promise<void> {
-        this.channel.publish(this.exchange, routinKey, Buffer.from(content))
+    async publishMessage(content: any, exchange: string): Promise<void> {
+        this.channel.publish(exchange, '', Buffer.from(content))
     }
 
-    async consumeMessage(queue: string, routinKey: string): Promise<any> {
-        const options: client.Options.Consume = {
+    async consumeMessage(queue: string, exchange: string, handleMessage: any): Promise<any> {
+        const options: Options.Consume = {
             noAck: true,
         }
 
-        return this.channel.consume(queue, this.consumer(routinKey), options)
+        return this.channel.consume(queue, this.consumer(exchange, handleMessage), options)
     }
 
-    private consumer(exchange: string) {
-        return (msg: client.ConsumeMessage): void => {
-            console.log(msg)
-            console.log(msg.fields)
-            console.log(msg.content)
+    private consumer(exchange: string, handleMessage: any ) {
+        return (msg: ConsumeMessage): void => {
             return msg && msg.fields.exchange == exchange ?
-            JSON.parse(msg.content.toString()):
-            null
+            handleMessage(JSON.parse(msg.content.toString())): null
         }
     }
 
     private async initialize() {
-        this.connection = await this.getConnection()
-        this.channel = await this.connection.createChannel()
-        
-        // queues avaliables
-        this.channel.assertQueue('email')
-        
-        this.channel.assertExchange('activate-account', 'topic', {durable: true})
-        this.channel.assertExchange('redefine-password', 'topic', {durable: true})
-        
-        this.channel.bindQueue('email', 'activate-account', '')
-        this.channel.bindQueue('email', 'recovery-password', '')
+       try{
+           this.connection = await this.getConnection()
+           this.channel = await this.connection.createChannel()
+           
+           // queues avaliables
+           this.createQueues(this.channel)
+           this.createExchanges(this.channel)
+           this.bindingQueuesWithExchanges(this.channel)
+           
+           // queues listeners
+           this.consumeMessage('email', 'activate-account', AccountFactory(this).activeAccount.bind(AccountFactory(this)))
+           this.consumeMessage('email', 'recovery-password', AccountFactory(this).redefinePassword.bind(AccountFactory(this)))
+           
+           console.info('Rabbitmq initialize with success')
+           
+        }catch(error){
+            console.info('Error initialize Rabbitmq: ', error.message)
+        }
         
     }
 
-    private async getConnection(): Promise<client.Connection> {
+    private async getConnection(): Promise<Connection> {
         await this.disconnect()
-        return await client.connect(this.uri)
+        return await connect(this.uri)
     }
 
     private async disconnect(): Promise<void> {
         if (this.connection) {
             this.connection.close()
         }
+    }
+
+    private createQueues(channel: Channel){
+        channel.assertQueue('email')
+    }
+
+    private async createExchanges(channel: Channel){
+        channel.assertExchange('activate-account', 'topic', {durable: true})
+        channel.assertExchange('recovery-password', 'topic', {durable: true})
+    }
+
+    
+    private async bindingQueuesWithExchanges(channel: Channel){
+        channel.bindQueue('email', 'activate-account', '')
+        channel.bindQueue('email', 'recovery-password', '')
     }
 
 

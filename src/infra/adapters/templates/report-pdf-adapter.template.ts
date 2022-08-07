@@ -3,13 +3,13 @@ import { join } from 'path'
 import { create } from 'html-pdf'
 import { ReleaseType } from '../../../domain/models/release-type'
 import { ReleaseModel } from '../../../domain/models/release'
-import { TemplateProtocol } from '../../../app/usecases/report/template.protocol'
+import { TemplateFileProtocol } from '../../../app/usecases/report/template.protocol'
 import { TemplateAttachmentsProtocol } from '../../../domain/protocols/email.protocol'
 
 
 const PATH_TEMPALTE = join(__dirname, '..', '..', '..', '..','public', 'mailTemplateReport.ejs')
 
-export class TemplateReportPdfImpl implements TemplateProtocol {
+export class TemplateReportPdfImpl implements TemplateFileProtocol {
 
     async generateTemplate(content: any): Promise<TemplateAttachmentsProtocol> {
         return await this.getTemplateReportPdf(content)

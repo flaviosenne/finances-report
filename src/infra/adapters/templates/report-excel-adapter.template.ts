@@ -2,12 +2,12 @@ import * as json2xls from 'json2xls'
 import { join } from 'path'
 import { ReleaseModel } from '../../../domain/models/release'
 import { FileProtocol } from '../../../domain/protocols/file.protocol'
-import { TemplateProtocol } from '../../../app/usecases/report/template.protocol'
+import { TemplateFileProtocol } from '../../../app/usecases/report/template.protocol'
 
 
 const XLSX_FILE_PATH = join(__dirname, '..', '..', '..','..', 'public', 'relatorio-mensal.xlsx')
 
-export class TemplateReportExcelImpl implements TemplateProtocol {
+export class TemplateReportExcelImpl implements TemplateFileProtocol {
     
     constructor(private readonly file: FileProtocol){}
 
