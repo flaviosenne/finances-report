@@ -4,7 +4,7 @@
   "description": "finances robot",
   "main": "index.ts",
   "scripts": {
-    "start": "node build/infra/index.js",
+    "start": "pm2 kill && pm2 start build/infra/index.js --name finances-back",
     "dev": "ts-node ./src/infra/index.ts",
     "prismaa": "prisma generate --schema=./src/infra/adapters/repositories/prisma/schema.prisma ",
     "clean:install": "rm -rf node_modules && rm -f package-lock.json && rm -f yarn.lock && rm -rf build && mkdir build && npm i ",
@@ -23,6 +23,7 @@
     "mysql2": "^2.3.3",
     "node-schedule": "^2.1.0",
     "nodemailer": "^6.7.5",
+    "pm2": "^5.2.0",
     "prisma": "^4.1.0",
     "ts-node": "^10.8.1"
   },
