@@ -4,7 +4,7 @@
   "description": "finances robot",
   "main": "index.ts",
   "scripts": {
-    "start": "pm2 kill && pm2 start build/infra/index.js --name finances-back",
+    "start": "pm2 kill && pm2 start build/infra/index.js --name finances-back && pm2 log",
     "dev": "ts-node ./src/infra/index.ts",
     "prismaa": "prisma generate --schema=./src/infra/adapters/repositories/prisma/schema.prisma ",
     "clean:install": "rm -rf node_modules && rm -f package-lock.json && rm -f yarn.lock && rm -rf build && mkdir build && npm i ",
