@@ -5,6 +5,7 @@ import { ReleaseType } from '../../../domain/models/release-type'
 import { ReleaseModel } from '../../../domain/models/release'
 import { TemplateFileProtocol } from '../../../app/usecases/report/template.protocol'
 import { TemplateAttachmentsProtocol } from '../../../domain/protocols/email.protocol'
+import { getFrequency, TypeFrequency } from '../../../app/usecases/utils/frequency'
 
 
 const PATH_TEMPALTE = join(__dirname, '..', '..', '..', '..','public', 'mailTemplateReport.ejs')
@@ -20,11 +21,9 @@ export class TemplateReportPdfImpl implements TemplateFileProtocol {
 
         return new Promise<TemplateAttachmentsProtocol>(async resolve => {
 
-            // const category = await postingsService.frequencyCategory(postings)
-            // const expensesPeriod = await postingsService.frequencyExpenses(postings)
-            // const revenuesPeriod = await postingsService.frequencyRevenues(postings)
-            // const expensesPeriodTwelveMonth = await postingsService.frequencyExpenses(postingsTwelveMonth)
-            // const revenuesPeriodTwelveMonth = await postingsService.frequencyRevenues(postingsTwelveMonth)
+            const category = await getFrequency(releases, TypeFrequency.CATEGORY)
+            const expensesPeriod = await getFrequency(releases, TypeFrequency.EXPENSE)
+            const revenuesPeriod = await getFrequency(releases, TypeFrequency.RECEP)
 
             const username = releases
                 .map(release => `${release.user.firstName} ${release.user.lastName}`)
@@ -58,17 +57,12 @@ export class TemplateReportPdfImpl implements TemplateFileProtocol {
                 'total': (totalRevenue - totalExpense),
                 'formatValue': formatValue,
                 'formatDate': formatDate,
-                // 'category': category['categories'],
-                // 'frequency': category['frequency'],
-                // 'periodExpense': expensesPeriod['period'],
-                // 'frequencyExpense': expensesPeriod['frequency'],
-                // 'periodRevenue': revenuesPeriod['period'],
-                // 'frequencyRevenue': revenuesPeriod['frequency'],
-                // 'periodExpenseTwelveMonth': expensesPeriodTwelveMonth['period'],
-                // 'frequencyExpenseTwelveMonth': expensesPeriodTwelveMonth['frequency'],
-                // 'periodRevenueTwelveMonth': revenuesPeriodTwelveMonth['period'],
-                // 'frequencyRevenueTwelveMonth': revenuesPeriodTwelveMonth['frequency'],
-
+                'category': category['categories'],
+                'frequency': category['frequency'],
+                'periodExpense': expensesPeriod['period'],
+                'frequencyExpense': expensesPeriod['frequency'],
+                'periodRevenue': revenuesPeriod['period'],
+                'frequencyRevenue': revenuesPeriod['frequency']
             })
 
             create(template, { format: 'A3' }).toBuffer((err: any, result: any) => {

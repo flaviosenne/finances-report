@@ -118,59 +118,59 @@
             </thead>
             <% releases.forEach(release=> { %>
                 <tr>
-                    
+
                     <% if(release.type=='RECEP' ) {%>
                         <td>
                             RECEITA
                         </td>
-                    <% } else { %>
+                        <% } else { %>
                             <td>
                                 DESPESA
                             </td>
-                    <% } %>
-                    
-                    <td>
-                        <%=formatDate.format(release.dueDate)%>
-                    </td>
-                    
-                    <% if(release.status=='PENDING' ) {%>
-                        <td>
-                            PENDENTE
-                        </td>
-                    <% } else { %>
-                        <td>
-                            FINALIZDO
-                        </td>
-                    <% } %>
-                    
-                    <td>
-                        <%=release.description%>
-                    </td>
+                            <% } %>
 
-                    <td>
-                        <%=release.category.description%>
-                    </td>
-                    
-                    <% if(release.type=='EXPENSE' ) {%>
-                        <td class="red">
-                            <%=formatValue.format(release.value)%>
-                        </td>
-                    <% } else { %>
-                        <td>
-                            <%=formatValue.format(release.value)%>
-                        </td>
-                    <% } %>
-                
+                                <td>
+                                    <%=formatDate.format(release.dueDate)%>
+                                </td>
+
+                                <% if(release.status=='PENDING' ) {%>
+                                    <td>
+                                        PENDENTE
+                                    </td>
+                                    <% } else { %>
+                                        <td>
+                                            FINALIZDO
+                                        </td>
+                                        <% } %>
+
+                                            <td>
+                                                <%=release.description%>
+                                            </td>
+
+                                            <td>
+                                                <%=release.category.description%>
+                                            </td>
+
+                                            <% if(release.type=='EXPENSE' ) {%>
+                                                <td class="red">
+                                                    <%=formatValue.format(release.value)%>
+                                                </td>
+                                                <% } else { %>
+                                                    <td>
+                                                        <%=formatValue.format(release.value)%>
+                                                    </td>
+                                                    <% } %>
+
                 </tr>
-                
+
                 <% }) %>
         </table>
 
     </div>
 
 
-    <!-- <h1>Categorias dos gastos</h1> -->
-    <!-- <div id="bar-category" style="width: 480px; height: 400px;"></div>
+    <h1>Categorias dos gastos</h1>
+    <div id="bar-category" style="width: 480px; height: 400px;"></div>
 
     <div class="chart">
         <h1>Gastos no periodo de 3 meses</h1>
@@ -183,10 +183,34 @@
     <div class="chart">
         <h1>Gastos no periodo de 12 meses</h1>
         <div id="log" style="width: 480px; height: 400px;"></div>
-    </div> -->
+    </div>
 
     <script type="text/javascript">
-
+        const category = JSON.parse('<%-JSON.stringify(category)%>')
+        const frequency = JSON.parse('<%-JSON.stringify(frequency)%>')
+        const periodExpense = JSON.parse('<%-JSON.stringify(periodExpense)%>')
+        const frequencyExpense = JSON.parse('<%-JSON.stringify(frequencyExpense)%>')
+        const periodRevenue = JSON.parse('<%-JSON.stringify(periodRevenue)%>')
+        const frequencyRevenue = JSON.parse('<%-JSON.stringify(frequencyRevenue)%>')
+        var dataCategory = [{
+            type: 'bar',
+            y: frequency,
+            x: category
+        }];
+        Plotly.newPlot('bar-category', dataCategory);
+        var dataExpenses = [{
+            type: 'bar',
+            y: frequencyExpense,
+            x: periodExpense
+        }];
+        Plotly.newPlot('bar-expenses', dataExpenses);
+        var dataRevenue = [{
+            type: 'bar',
+            y: frequencyRevenue,
+            x: periodRevenue
+        }];
+        Plotly.newPlot('bar-revenues', dataRevenue);
+        
     </script>
 
 </body>
