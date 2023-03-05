@@ -8,7 +8,7 @@ import { TemplateAttachmentsProtocol } from '../../../domain/protocols/email.pro
 import { getFrequency, TypeFrequency } from '../../../app/usecases/utils/frequency'
 
 
-const PATH_TEMPALTE = join(__dirname, '..', '..', '..', '..','public', 'mailTemplateReport.ejs')
+const PATH_TEMPALTE = join(__dirname, '..', '..', '..', '..', 'public', 'mailTemplateReport.ejs')
 
 export class TemplateReportPdfImpl implements TemplateFileProtocol {
 
@@ -21,16 +21,16 @@ export class TemplateReportPdfImpl implements TemplateFileProtocol {
 
         return new Promise<TemplateAttachmentsProtocol>(async resolve => {
 
+            const expenses = releases.filter(release => release.type == ReleaseType.EXPENSE)
+            const receps = releases.filter(release => release.type == ReleaseType.RECEP)
+            
             const category = await getFrequency(releases, TypeFrequency.CATEGORY)
-            const expensesPeriod = await getFrequency(releases, TypeFrequency.EXPENSE)
-            const revenuesPeriod = await getFrequency(releases, TypeFrequency.RECEP)
+            const expensesByPeriod = await getFrequency(expenses, TypeFrequency.EXPENSE)
+            const recepsByPeriod = await getFrequency(receps, TypeFrequency.RECEP)
 
             const username = releases
                 .map(release => `${release.user.firstName} ${release.user.lastName}`)
                 .reduce((name: string, element): string => element)
-
-            const expenses = releases.filter(release => release.type == ReleaseType.EXPENSE)
-            const receps = releases.filter(release => release.type == ReleaseType.RECEP)
 
             let totalExpense = 0
             let totalRevenue = 0
@@ -59,10 +59,10 @@ export class TemplateReportPdfImpl implements TemplateFileProtocol {
                 'formatDate': formatDate,
                 'category': category['categories'],
                 'frequency': category['frequency'],
-                'periodExpense': expensesPeriod['period'],
-                'frequencyExpense': expensesPeriod['frequency'],
-                'periodRevenue': revenuesPeriod['period'],
-                'frequencyRevenue': revenuesPeriod['frequency']
+                'periodExpense': expensesByPeriod['period'],
+                'frequencyExpense': expensesByPeriod['frequency'],
+                'periodRevenue': recepsByPeriod['period'],
+                'frequencyRevenue': recepsByPeriod['frequency']
             })
 
             create(template, { format: 'A3' }).toBuffer((err: any, result: any) => {
