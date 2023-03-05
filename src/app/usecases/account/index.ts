@@ -14,7 +14,7 @@ export class AccountImpl implements AccountProtocol {
         }){}
 
     async activeAccount(payload: any): Promise<void> {
-        const dto: EmailDto = JSON.parse(payload)
+        const dto: EmailDto = payload
 
         const content = await this.template['activate-account'].generateTemplate(dto)
 
@@ -22,7 +22,7 @@ export class AccountImpl implements AccountProtocol {
     }
     
     async redefinePassword(payload: any): Promise<void> {
-        const dto: EmailDto = JSON.parse(payload)
+        const dto: EmailDto = payload
 
         const content = await this.template['recovery-password'].generateTemplate(dto)
 
