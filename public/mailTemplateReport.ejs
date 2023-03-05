@@ -21,6 +21,7 @@
     }
 
     .chart {
+        min-width:100%;
         page-break-inside: avoid;
     }
 
@@ -180,18 +181,14 @@
         <h1>Ganhos no periodo de 3 meses</h1>
         <div id="bar-revenues" style="width: 480px; height: 400px;"></div>
     </div>
-    <div class="chart">
-        <h1>Gastos no periodo de 12 meses</h1>
-        <div id="log" style="width: 480px; height: 400px;"></div>
-    </div>
-
+    
     <script type="text/javascript">
         const category = JSON.parse('<%-JSON.stringify(category)%>')
         const frequency = JSON.parse('<%-JSON.stringify(frequency)%>')
         const periodExpense = JSON.parse('<%-JSON.stringify(periodExpense)%>')
         const frequencyExpense = JSON.parse('<%-JSON.stringify(frequencyExpense)%>')
-        const periodRevenue = JSON.parse('<%-JSON.stringify(periodRevenue)%>')
-        const frequencyRevenue = JSON.parse('<%-JSON.stringify(frequencyRevenue)%>')
+        const periodRevenue = JSON.parse('<%-JSON.stringify(periodRecep)%>')
+        const frequencyRevenue = JSON.parse('<%-JSON.stringify(frequencyRecep)%>')
         var dataCategory = [{
             type: 'bar',
             y: frequency,

@@ -28,6 +28,7 @@ export class TemplateReportPdfImpl implements TemplateFileProtocol {
             const expensesByPeriod = await getFrequency(expenses, TypeFrequency.EXPENSE)
             const recepsByPeriod = await getFrequency(receps, TypeFrequency.RECEP)
 
+
             const username = releases
                 .map(release => `${release.user.firstName} ${release.user.lastName}`)
                 .reduce((name: string, element): string => element)
@@ -57,12 +58,15 @@ export class TemplateReportPdfImpl implements TemplateFileProtocol {
                 'total': (totalRevenue - totalExpense),
                 'formatValue': formatValue,
                 'formatDate': formatDate,
-                'category': category['categories'],
+                
+                'category': category['label'],
                 'frequency': category['frequency'],
-                'periodExpense': expensesByPeriod['period'],
+                
+                'periodExpense': expensesByPeriod['label'],
                 'frequencyExpense': expensesByPeriod['frequency'],
-                'periodRevenue': recepsByPeriod['period'],
-                'frequencyRevenue': recepsByPeriod['frequency']
+                
+                'periodRecep': recepsByPeriod['label'],
+                'frequencyRecep': recepsByPeriod['frequency']
             })
 
             create(template, { format: 'A3' }).toBuffer((err: any, result: any) => {
