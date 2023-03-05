@@ -5,23 +5,27 @@ import { TemplateContentProtocol } from "../report/template.protocol";
 
 
 export class AccountImpl implements AccountProtocol {
-    
-    constructor(private readonly amqp: AmqpProtocol, 
+
+    constructor(private readonly amqp: AmqpProtocol,
         private readonly email: EmailContentProtocol,
         private readonly template: {
             'activate-account': TemplateContentProtocol,
             'recovery-password': TemplateContentProtocol
-        }){}
+        }) { }
 
     async activeAccount(payload: any): Promise<void> {
+        console.log('receive payload active account to queue')
+
         const dto: EmailDto = payload
 
         const content = await this.template['activate-account'].generateTemplate(dto)
 
         this.email.sendContent(content, 'Ativação da conta', dto.user.email, dto.user.firstName)
     }
-    
+
     async redefinePassword(payload: any): Promise<void> {
+        console.log('receive payload redefine password to queue')
+        
         const dto: EmailDto = payload
 
         const content = await this.template['recovery-password'].generateTemplate(dto)
